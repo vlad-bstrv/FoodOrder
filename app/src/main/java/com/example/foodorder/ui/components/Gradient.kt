@@ -6,10 +6,12 @@ import androidx.compose.foundation.border
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -52,3 +54,19 @@ fun Modifier.offsetGradientBackground(
         tileMode = TileMode.Mirror
     )
 )
+
+fun Modifier.offsetGradientBackground(
+    colors: List<Color>,
+    width: Density.() -> Float,
+    offset: Density.() -> Float
+) = drawBehind{
+    val actualOffset = offset()
+    drawRect(
+        Brush.horizontalGradient(
+            colors = colors,
+            startX = -actualOffset,
+            endX = width() - actualOffset,
+            tileMode = TileMode.Mirror
+        )
+    )
+}
