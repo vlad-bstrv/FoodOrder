@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ import com.example.foodorder.R
 import com.example.foodorder.model.CollectionType
 import com.example.foodorder.model.FoodCollection
 import com.example.foodorder.model.FoodItem
+import com.example.foodorder.model.foodItems
 import com.example.foodorder.ui.theme.Caramel40
 import com.example.foodorder.ui.theme.Caramel80
 import com.example.foodorder.ui.theme.Orange40
@@ -59,7 +61,7 @@ private val Density.cardWidthWithPaddingPx
     get() = (HighlightCardWidth + HighlightCardPadding).toPx()
 
 @Composable
-fun FoodCollection(
+fun FoodCollectionComp(
     foodCollection: FoodCollection,
     onFoodClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -202,6 +204,27 @@ fun HighlightedFood(
     }
 }
 
+@Preview
+@Composable
+private fun HighlightedFoodItemPrev() {
+    val rowState = rememberLazyListState()
+    val cardWidthWithPaddingPx = with(LocalDensity.current) {
+        cardWidthWithPaddingPx
+    }
+    val scrollProvide = {
+        val offsetFromStart = cardWidthWithPaddingPx * rowState.firstVisibleItemIndex
+        offsetFromStart + rowState.firstVisibleItemScrollOffset
+    }
+
+    HighlightedFoodItem(
+        foodItem = foodItems[0],
+        onFoodClick = {},
+        index = 0,
+        gradient = listOf(Orange80, Caramel40, Caramel80, Orange40),
+        scrollProvider = scrollProvide,
+    )
+}
+
 @Composable
 fun HighlightedFoodItem(
     foodItem: FoodItem,
@@ -244,15 +267,14 @@ fun HighlightedFoodItem(
                                 gradientOffset
                             }
                         )
-                ) {
-                    FoodImage(
-                        imageUrl = foodItem.imageUrl,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(120.dp)
-                            .align(Alignment.BottomCenter)
-                    )
-                }
+                )
+                FoodImage(
+                    imageUrl = foodItem.imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .align(Alignment.BottomCenter)
+                )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -24,7 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.example.foodorder.model.Filter
 import com.example.foodorder.model.FoodCollection
 import com.example.foodorder.model.FoodRepo
+import com.example.foodorder.ui.components.DestinationBar
 import com.example.foodorder.ui.components.FilterBar
+import com.example.foodorder.ui.components.FoodCollectionComp
 
 @Composable
 fun Feed(
@@ -39,6 +40,13 @@ fun Feed(
         FoodRepo.getFilters()
     }
 
+    Feed(
+        foodCollection = foodCollection,
+        filters = filters,
+        onFoodClick = onFoodClick,
+        modifier = modifier
+    )
+
 }
 
 @Composable
@@ -46,15 +54,28 @@ private fun Feed(
     foodCollection: List<FoodCollection>,
     filters: List<Filter>,
     onFoodClick: (Long) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier.fillMaxSize()
     ) {
         Box {
-
+            FoodCollectionList(
+                foodCollection = foodCollection,
+                filters = filters,
+                onFoodClick = onFoodClick
+            )
+            DestinationBar()
         }
     }
+}
+
+@Preview
+@Composable
+private fun FeedPreview() {
+    Feed(
+        onFoodClick = {}
+    )
 }
 
 
@@ -63,7 +84,7 @@ private fun FoodCollectionList(
     foodCollection: List<FoodCollection>,
     filters: List<Filter>,
     onFoodClick: (Long) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     var filtersVisible by rememberSaveable {
         mutableStateOf(false)
@@ -84,6 +105,7 @@ private fun FoodCollectionList(
                 if (index > 0) {
                     HorizontalDivider(thickness = 2.dp)
                 }
+                FoodCollectionComp(foodCollection = foodCollection, onFoodClick = onFoodClick)
             }
         }
     }
