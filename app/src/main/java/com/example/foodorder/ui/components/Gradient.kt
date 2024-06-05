@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -41,7 +43,6 @@ fun Modifier.fadeInGradientBorder(
 
 }
 
-@Composable
 fun Modifier.offsetGradientBackground(
     colors: List<Color>,
     width: Float,
@@ -68,5 +69,16 @@ fun Modifier.offsetGradientBackground(
             endX = width() - actualOffset,
             tileMode = TileMode.Mirror
         )
+    )
+}
+
+fun Modifier.diagonalGradientTint(
+    colors: List<Color>,
+    blendMode: BlendMode
+) = drawWithContent {
+    drawContent()
+    drawRect(
+        brush = Brush.linearGradient(colors),
+        blendMode = blendMode
     )
 }
