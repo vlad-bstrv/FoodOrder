@@ -13,8 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.foodorder.ui.detail.FoodDetail
 import com.example.foodorder.ui.home.Feed
+import com.example.foodorder.ui.navigation.FoodOrderNavigationHost
+import com.example.foodorder.ui.navigation.Tabs
 import com.example.foodorder.ui.theme.FoodOrderTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,26 +30,21 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Feed(onFoodClick = {})
-                    FoodDetail(foodId = 2L) {}
+                    FoodOrderApp()
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FoodOrderTheme {
-        Greeting("Android")
+    @Composable
+    fun FoodOrderApp() {
+        val navController = rememberNavController()
+        Scaffold {
+            FoodOrderNavigationHost(
+                startDestination = Tabs.Feed.route,
+                modifier = Modifier.padding(paddingValues = it),
+                navController = navController
+            )
+        }
     }
 }
